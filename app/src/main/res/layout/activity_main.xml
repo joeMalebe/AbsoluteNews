@@ -12,10 +12,10 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_sport_list"
+            android:id="@+id/recycler_article_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:itemCount="5"
-            tools:listitem="@layout/item_sport" />
+            tools:listitem="@layout/item_news_article" />
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

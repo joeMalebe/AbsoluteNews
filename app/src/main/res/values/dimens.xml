@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="gutterSpace">16dp</dimen>
+    <dimen name="image_thumbnail_height">144dp</dimen>
+    <dimen name="image_thumbnail_width">280dp</dimen>
 </resources>
