@@ -27,8 +27,8 @@ class LandingPresenter : ILandingMvp.Presenter {
     }
 
     class TopHeadlinesObserver(val view: ILandingMvp.View) : SingleObserver<List<Article>> {
-        override fun onSuccess(t: List<Article>) {
-            view.displayArtivles(t)
+        override fun onSuccess(articles: List<Article>) {
+            view.displayArtivles(articles)
         }
 
         override fun onSubscribe(d: Disposable) {
