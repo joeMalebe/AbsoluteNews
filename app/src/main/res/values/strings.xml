@@ -1,4 +1,6 @@
 <resources>
-    <string name="app_name">Absolute Sport</string>
+    <string name="app_name">Absolute News</string>
     <string name="api_key">9419ee88f8c743baa5a8b1ee88d1e200</string>
+    <string name="http">http://</string>
+    <string name="https">https://</string>
 </resources>
