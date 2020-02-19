@@ -34,6 +34,12 @@ class LandingActivity : AppCompatActivity(), ILandingMvp.View {
             recycler_article_list.adapter = ArticleListAdapter(articles)
             recycler_article_list.layoutManager = LinearLayoutManager(this)
 
+            recycler_article_list.addItemDecoration(
+                DividerItemDecoration(
+                    recycler_article_list.context,
+                    LinearLayoutManager.VERTICAL
+                )
+            )
             Log.d("LandingActivity", "${articles.size}")
         }
     }

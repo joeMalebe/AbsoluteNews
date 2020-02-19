@@ -13,7 +13,7 @@ class LandingPresenter : ILandingMvp.Presenter {
     private lateinit var view: ILandingMvp.View
 
     val networkRepository = NetworkRepository()
-    override fun getTopHeadlines(){
+    override fun getTopHeadlines() {
         networkRepository.getTopHeadlines().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe(TopHeadlinesObserver(view))
     }
