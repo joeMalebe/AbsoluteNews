@@ -20,7 +20,8 @@
         android:id="@+id/progress_image_loader"
         android:layout_width="@dimen/image_thumbnail_width"
         android:layout_height="@dimen/image_thumbnail_height"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:padding="@dimen/gutterSpace" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_article_image"
