@@ -1,21 +1,20 @@
 package com.example.absolutesport.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.absolutesport.R
 import com.example.absolutesport.network.Article
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_articles_list.*
 
-class LandingActivity : AppCompatActivity(), ILandingMvp.View {
+class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
 
-    val presenter: ILandingMvp.Presenter = LandingPresenter()
+    val presenter: IArticleListMvp.Presenter = ArticleListPresenter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_articles_list)
         presenter.attach(this)
 
         displayScreen()
@@ -26,7 +25,7 @@ class LandingActivity : AppCompatActivity(), ILandingMvp.View {
     }
 
     override fun showLoading() {
-
+        Log.d(ArticleListActivity::class.simpleName, "loading")
     }
 
     override fun displayArtivles(articles: List<Article>) {

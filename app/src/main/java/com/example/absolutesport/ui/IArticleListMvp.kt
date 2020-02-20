@@ -2,7 +2,7 @@ package com.example.absolutesport.ui
 
 import com.example.absolutesport.network.Article
 
-interface ILandingMvp {
+interface IArticleListMvp {
     interface View{
         fun displayScreen()
         fun showLoading()
