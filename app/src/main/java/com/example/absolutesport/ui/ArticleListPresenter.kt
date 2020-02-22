@@ -8,9 +8,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.logging.Logger
 
-class LandingPresenter : ILandingMvp.Presenter {
+class ArticleListPresenter : IArticleListMvp.Presenter {
 
-    private lateinit var view: ILandingMvp.View
+    private lateinit var view: IArticleListMvp.View
 
     val networkRepository = NetworkRepository()
     override fun getTopHeadlines() {
@@ -18,7 +18,7 @@ class LandingPresenter : ILandingMvp.Presenter {
             .observeOn(AndroidSchedulers.mainThread()).subscribe(TopHeadlinesObserver(view))
     }
 
-    override fun attach(view: ILandingMvp.View) {
+    override fun attach(view: IArticleListMvp.View) {
         this.view = view
     }
 
@@ -26,7 +26,7 @@ class LandingPresenter : ILandingMvp.Presenter {
         Logger.getAnonymousLogger().info("detach")
     }
 
-    class TopHeadlinesObserver(val view: ILandingMvp.View) : SingleObserver<List<Article>> {
+    class TopHeadlinesObserver(val view: IArticleListMvp.View) : SingleObserver<List<Article>> {
         override fun onSuccess(articles: List<Article>) {
             view.displayArtivles(articles)
         }

@@ -1,6 +1,7 @@
 package com.example.absolutesport.network
 
-import com.fasterxml.jackson.annotation.JsonClassDescription
+import android.os.Parcel
+import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -15,4 +16,41 @@ data class Article(
     @JsonProperty("content") val content: String?,
     @JsonProperty("source") val source: Source?
 
-);
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readParcelable(Source::class.java.classLoader)
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(author)
+        parcel.writeString(title)
+        parcel.writeString(description)
+        parcel.writeString(url)
+        parcel.writeString(urlToImage)
+        parcel.writeString(pulishedDate)
+        parcel.writeString(content)
+        parcel.writeParcelable(source, flags)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Article> {
+        override fun createFromParcel(parcel: Parcel): Article {
+            return Article(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Article?> {
+            return arrayOfNulls(size)
+        }
+    }
+}

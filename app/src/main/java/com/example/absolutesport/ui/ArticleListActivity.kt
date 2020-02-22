@@ -1,21 +1,22 @@
 package com.example.absolutesport.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.absolutesport.R
 import com.example.absolutesport.network.Article
-import kotlinx.android.synthetic.main.activity_main.*
+import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.activity_articles_list.*
 
-class LandingActivity : AppCompatActivity(), ILandingMvp.View {
+class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
 
-    val presenter: ILandingMvp.Presenter = LandingPresenter()
+    val compositeDisposable = CompositeDisposable()
+    val presenter: IArticleListMvp.Presenter = ArticleListPresenter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_articles_list)
         presenter.attach(this)
 
         displayScreen()
@@ -26,12 +27,24 @@ class LandingActivity : AppCompatActivity(), ILandingMvp.View {
     }
 
     override fun showLoading() {
-
+        Log.d(ArticleListActivity::class.simpleName, "loading")
     }
 
     override fun displayArtivles(articles: List<Article>) {
         if (!articles.isEmpty()) {
-            recycler_article_list.adapter = ArticleListAdapter(articles)
+            val adapter = ArticleListAdapter(articles)
+            compositeDisposable.add(adapter.getClickedArticle().subscribe({
+                startActivity(
+                    ArticleViewArticleActivity.getStartIntent(
+                        recycler_article_list.context,
+                        it
+                    )
+                )
+            }, {
+                Log.e(ArticleListActivity::class.simpleName, it.message)
+            }))
+
+            recycler_article_list.adapter = adapter
             recycler_article_list.layoutManager = LinearLayoutManager(this)
 
             recycler_article_list.addItemDecoration(
@@ -42,6 +55,11 @@ class LandingActivity : AppCompatActivity(), ILandingMvp.View {
             )
             Log.d("LandingActivity", "${articles.size}")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.dispose()
     }
 
     override fun dismissLoading() {
