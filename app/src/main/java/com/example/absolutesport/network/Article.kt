@@ -25,7 +25,7 @@ data class Article(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        TODO("source")
+        parcel.readParcelable(Source::class.java.classLoader)
     ) {
     }
 
@@ -37,6 +37,7 @@ data class Article(
         parcel.writeString(urlToImage)
         parcel.writeString(pulishedDate)
         parcel.writeString(content)
+        parcel.writeParcelable(source, flags)
     }
 
     override fun describeContents(): Int {
@@ -52,4 +53,5 @@ data class Article(
             return arrayOfNulls(size)
         }
     }
-};
+
+}
