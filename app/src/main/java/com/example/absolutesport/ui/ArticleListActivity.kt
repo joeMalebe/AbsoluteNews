@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.absolutesport.R
 import com.example.absolutesport.network.Article
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_articles_list.*
 
 class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
 
+    val compositeDisposable = CompositeDisposable()
     val presenter: IArticleListMvp.Presenter = ArticleListPresenter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,19 @@ class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
 
     override fun displayArtivles(articles: List<Article>) {
         if (!articles.isEmpty()) {
-            recycler_article_list.adapter = ArticleListAdapter(articles)
+            val adapter = ArticleListAdapter(articles)
+            compositeDisposable.add(adapter.getClickedArticle().subscribe({
+                startActivity(
+                    ArticleViewArticleActivity.getStartIntent(
+                        recycler_article_list.context,
+                        it
+                    )
+                )
+            }, {
+                Log.e(ArticleListActivity::class.simpleName, it.message)
+            }))
+
+            recycler_article_list.adapter = adapter
             recycler_article_list.layoutManager = LinearLayoutManager(this)
 
             recycler_article_list.addItemDecoration(
@@ -41,6 +55,11 @@ class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
             )
             Log.d("LandingActivity", "${articles.size}")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.dispose()
     }
 
     override fun dismissLoading() {

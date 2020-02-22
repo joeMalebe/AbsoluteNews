@@ -53,5 +53,4 @@ data class Article(
             return arrayOfNulls(size)
         }
     }
-
 }

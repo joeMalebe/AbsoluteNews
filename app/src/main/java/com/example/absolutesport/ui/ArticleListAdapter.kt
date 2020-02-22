@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
@@ -18,11 +19,13 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import java.net.URI
+
 
 open class ArticleListAdapter(val articles: List<Article>) :
     RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
-
+    val publishHyperlinkClickSubject = PublishSubject.create<Article>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val view =
@@ -38,18 +41,33 @@ open class ArticleListAdapter(val articles: List<Article>) :
         holder.display(articles[position])
     }
 
-    class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val titleTextView = view.findViewById<TextView>(R.id.text_article_title)
-        val image = view.findViewById<AppCompatImageView>(R.id.image_article_image)
-        val loader = view.findViewById<ProgressBar>(R.id.progress_image_loader)
+    fun getClickedArticle(): Observable<Article> {
+        return publishHyperlinkClickSubject.hide()
+    }
 
+    inner class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val titleTextView = view.findViewById<TextView>(R.id.text_article_title)
+        val readMeTextView = view.findViewById<TextView>(R.id.text_read_more)
+        val image = view.findViewById<AppCompatImageView>(R.id.image_article_thumbnail)
+        val articleInformationLayout =
+            view.findViewById<LinearLayout>(R.id.layout_article_information)
+        val loader = view.findViewById<ProgressBar>(R.id.progress_image_loader)
+        lateinit var article: Article
         fun display(article: Article) {
             titleTextView.setText(article.title)
+            this.article = article
+            readMeTextView.setOnClickListener {
+                publishHyperlinkClickSubject.onNext(article)
+            }
+
+
             showLoader()
             if (article.urlToImage != null) {
                 val urlToImage = replaceHttpWithHttps(image.context, article.urlToImage)
-                loadImageFromUrl(urlToImage)
+                loadImageFromUrl(article.urlToImage)
             } else {
+                /*article.image =
+                    BitmapFactory.decodeResource(image.resources, R.drawable.ic_launcher_background)*/
                 dismissLoader()
             }
         }
@@ -57,12 +75,13 @@ open class ArticleListAdapter(val articles: List<Article>) :
         private fun showLoader() {
             loader.visibility = View.VISIBLE
             image.visibility = View.GONE
+            articleInformationLayout.visibility = View.GONE
         }
 
         private fun dismissLoader() {
             loader.visibility = View.GONE
             image.visibility = View.VISIBLE
-
+            articleInformationLayout.visibility = View.VISIBLE
         }
 
         private fun replaceHttpWithHttps(
@@ -80,14 +99,13 @@ open class ArticleListAdapter(val articles: List<Article>) :
 
         private fun loadImageFromUrl(urlToImage: String) {
             getBitmap(
-                urlToImage,
-                image.context
+                urlToImage
             ).observeOn(AndroidSchedulers.mainThread()).subscribeOn(
                 Schedulers.newThread()
             ).subscribe(DownloadImageFromUrlObserver(image))
         }
 
-        fun getBitmap(url: String?, context: Context): Observable<Bitmap> {
+        fun getBitmap(url: String?): Observable<Bitmap> {
             return Observable.fromCallable {
                 val inputStream = URI(url).toURL().openStream()
                 val image: Bitmap = BitmapFactory.decodeStream(inputStream)
@@ -116,7 +134,6 @@ open class ArticleListAdapter(val articles: List<Article>) :
 
             override fun onComplete() {
                 Log.d("DownloadImageFromUrl", "on complete")
-                dismissLoader()
             }
         }
 
