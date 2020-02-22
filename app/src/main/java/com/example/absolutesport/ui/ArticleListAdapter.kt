@@ -7,10 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.absolutesport.R
 import com.example.absolutesport.network.Article
@@ -47,16 +47,16 @@ open class ArticleListAdapter(val articles: List<Article>) :
 
     inner class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView = view.findViewById<TextView>(R.id.text_article_title)
-        val readMeTextView = view.findViewById<TextView>(R.id.text_read_more)
+        //val readMeTextView = view.findViewById<TextView>(R.id.text_read_more)
         val image = view.findViewById<AppCompatImageView>(R.id.image_article_thumbnail)
         val articleInformationLayout =
-            view.findViewById<LinearLayout>(R.id.layout_article_information)
+            view.findViewById<ConstraintLayout>(R.id.layout_article_information)
         val loader = view.findViewById<ProgressBar>(R.id.progress_image_loader)
         lateinit var article: Article
         fun display(article: Article) {
             titleTextView.setText(article.title)
             this.article = article
-            readMeTextView.setOnClickListener {
+            articleInformationLayout.setOnClickListener {
                 publishHyperlinkClickSubject.onNext(article)
             }
 
@@ -75,13 +75,13 @@ open class ArticleListAdapter(val articles: List<Article>) :
         private fun showLoader() {
             loader.visibility = View.VISIBLE
             image.visibility = View.GONE
-            articleInformationLayout.visibility = View.GONE
+            titleTextView.visibility = View.GONE
         }
 
         private fun dismissLoader() {
             loader.visibility = View.GONE
             image.visibility = View.VISIBLE
-            articleInformationLayout.visibility = View.VISIBLE
+            titleTextView.visibility = View.VISIBLE
         }
 
         private fun replaceHttpWithHttps(

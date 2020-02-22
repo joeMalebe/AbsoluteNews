@@ -1,49 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/gutterSpace"
-    android:orientation="horizontal">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/layout_article_information"
-        android:layout_marginEnd="@dimen/gutterSpace"
-        android:layout_weight="1"
-        android:orientation="vertical">
+    android:id="@+id/layout_article_information"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="@dimen/gutterSpace">
 
         <TextView
             android:id="@+id/text_article_title"
             style="@style/text_subtitle"
-            android:layout_width="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/image_article_thumbnail"
+            android:layout_width="0dp"
+            android:paddingEnd="@dimen/gutterSpaceHalf"
+            android:paddingStart="0dp"
+            android:paddingTop="@dimen/gutterSpaceHalf"
+            android:paddingBottom="0dp"
             android:layout_height="wrap_content"
             tools:text="Coronavirus: China enacts tighter restrictions in Hubei" />
 
-        <TextView
-            android:id="@+id/text_read_more"
-            style="@style/text_hyper_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/gutterSpacehalf"
-            android:paddingBottom="@dimen/gutterSpacehalf"
-            android:text="@string/read_more" />
-    </LinearLayout>
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_article_thumbnail"
-        android:layout_width="@dimen/image_thumbnail_width"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/text_article_title"
+        app:layout_constraintTop_toTopOf="@id/text_article_title"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.4"
         android:layout_height="@dimen/image_thumbnail_height"
-        android:layout_weight="1"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:src="@drawable/ic_broken_image_black_24dp" />
 
     <ProgressBar
         android:id="@+id/progress_image_loader"
         android:layout_gravity="center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="@dimen/image_thumbnail_width"
         android:visibility="gone"
         android:layout_height="@dimen/image_thumbnail_height"
         android:padding="@dimen/gutterSpace" />
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
