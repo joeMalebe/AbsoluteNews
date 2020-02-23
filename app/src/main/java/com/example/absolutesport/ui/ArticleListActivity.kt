@@ -1,5 +1,7 @@
 package com.example.absolutesport.ui
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import com.example.absolutesport.R
 import com.example.absolutesport.network.Article
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_articles_list.*
+import java.io.ByteArrayOutputStream
 
 class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
 
@@ -34,6 +37,8 @@ class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
         if (!articles.isEmpty()) {
             val adapter = ArticleListAdapter(articles)
             compositeDisposable.add(adapter.getClickedArticle().subscribe({
+                cacheArticleImage(it)
+
                 startActivity(
                     ArticleViewArticleActivity.getStartIntent(
                         recycler_article_list.context,
@@ -54,6 +59,17 @@ class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
                 )
             )
             Log.d("LandingActivity", "${articles.size}")
+        }
+    }
+
+    private fun cacheArticleImage(article: Article) {
+        if (article.image != null) {
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            article.image!!.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+            val fileOutputStream =
+                openFileOutput(article.hashCode().toString(), Context.MODE_PRIVATE)
+            fileOutputStream.write(byteArrayOutputStream.toByteArray())
+            article.image = null
         }
     }
 

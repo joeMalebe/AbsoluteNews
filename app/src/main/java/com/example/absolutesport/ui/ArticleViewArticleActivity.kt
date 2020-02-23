@@ -2,6 +2,7 @@ package com.example.absolutesport.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.absolutesport.R
@@ -34,6 +35,8 @@ class ArticleViewArticleActivity : AppCompatActivity() {
     }
 
     private fun displayScreen(article: Article) {
+        text_article_title.setText(article.title)
         text_content.setText(article.content)
+        image_article_bilboard.setImageBitmap(BitmapFactory.decodeStream(openFileInput(article.hashCode().toString())))
     }
 }

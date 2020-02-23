@@ -119,6 +119,7 @@ open class ArticleListAdapter(val articles: List<Article>) :
 
             override fun onNext(bitmapFromUrl: Bitmap) {
                 image.setImageBitmap(bitmapFromUrl)
+                article.image = bitmapFromUrl
                 dismissLoader()
             }
 
