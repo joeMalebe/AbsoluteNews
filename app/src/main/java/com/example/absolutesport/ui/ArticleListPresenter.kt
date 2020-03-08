@@ -28,7 +28,7 @@ class ArticleListPresenter : IArticleListMvp.Presenter {
 
     class TopHeadlinesObserver(val view: IArticleListMvp.View) : SingleObserver<List<Article>> {
         override fun onSuccess(articles: List<Article>) {
-            view.displayArtivles(articles)
+            view.displayArticles(articles)
         }
 
         override fun onSubscribe(d: Disposable) {

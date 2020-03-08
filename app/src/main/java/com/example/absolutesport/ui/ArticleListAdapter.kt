@@ -22,7 +22,6 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.net.URI
 
-
 open class ArticleListAdapter(val articles: List<Article>) :
     RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
     val publishHyperlinkClickSubject = PublishSubject.create<Article>()
@@ -47,7 +46,6 @@ open class ArticleListAdapter(val articles: List<Article>) :
 
     inner class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView = view.findViewById<TextView>(R.id.text_article_title)
-        //val readMeTextView = view.findViewById<TextView>(R.id.text_read_more)
         val image = view.findViewById<AppCompatImageView>(R.id.image_article_thumbnail)
         val articleInformationLayout =
             view.findViewById<ConstraintLayout>(R.id.layout_article_information)
@@ -60,14 +58,11 @@ open class ArticleListAdapter(val articles: List<Article>) :
                 publishHyperlinkClickSubject.onNext(article)
             }
 
-
             showLoader()
             if (article.urlToImage != null) {
                 val urlToImage = replaceHttpWithHttps(image.context, article.urlToImage)
                 loadImageFromUrl(article.urlToImage)
             } else {
-                /*article.image =
-                    BitmapFactory.decodeResource(image.resources, R.drawable.ic_launcher_background)*/
                 dismissLoader()
             }
         }
@@ -118,7 +113,7 @@ open class ArticleListAdapter(val articles: List<Article>) :
         ) : Observer<Bitmap> {
 
             override fun onNext(bitmapFromUrl: Bitmap) {
-                image.setImageBitmap(bitmapFromUrl)
+                image.setImageBitmap(Bitmap.createScaledBitmap(bitmapFromUrl, 200, 140, false))
                 article.image = bitmapFromUrl
                 dismissLoader()
             }
