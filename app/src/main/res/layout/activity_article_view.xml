@@ -4,24 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/gutterSpace"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_article_bilboard"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/article_full_image_height"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/text_article_title"
+        style="@style/text_subtitle_bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/gutterSpace"
+        android:layout_marginBottom="@dimen/gutterSpaceHalf"
+        app:layout_constraintEnd_toEndOf="@id/image_article_bilboard"
+        app:layout_constraintStart_toStartOf="@id/image_article_bilboard"
+        app:layout_constraintTop_toBottomOf="@id/image_article_bilboard" />
 
     <TextView
         android:id="@+id/text_content"
         style="@style/text_caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/gutterSpace"
-        app:layout_constraintEnd_toEndOf="@id/image_article_bilboard"
-        app:layout_constraintStart_toStartOf="@id/image_article_bilboard"
-        app:layout_constraintTop_toBottomOf="@id/image_article_bilboard" />
-
+        app:layout_constraintEnd_toEndOf="@id/text_article_title"
+        app:layout_constraintStart_toStartOf="@id/text_article_title"
+        app:layout_constraintTop_toBottomOf="@id/text_article_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.absolutesport.network
 
+import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
@@ -17,6 +18,8 @@ data class Article(
     @JsonProperty("source") val source: Source?
 
 ) : Parcelable {
+    var image: Bitmap? = null
+
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
@@ -27,6 +30,7 @@ data class Article(
         parcel.readString(),
         parcel.readParcelable(Source::class.java.classLoader)
     ) {
+        image = parcel.readParcelable(Bitmap::class.java.classLoader)
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -38,6 +42,7 @@ data class Article(
         parcel.writeString(pulishedDate)
         parcel.writeString(content)
         parcel.writeParcelable(source, flags)
+        parcel.writeParcelable(image, flags)
     }
 
     override fun describeContents(): Int {
