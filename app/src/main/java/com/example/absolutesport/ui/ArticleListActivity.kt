@@ -33,7 +33,7 @@ class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
         Log.d(ArticleListActivity::class.simpleName, "loading")
     }
 
-    override fun displayArtivles(articles: List<Article>) {
+    override fun displayArticles(articles: List<Article>) {
         if (!articles.isEmpty()) {
             val adapter = ArticleListAdapter(articles)
             compositeDisposable.add(adapter.getClickedArticle().subscribe({

@@ -6,7 +6,7 @@ interface IArticleListMvp {
     interface View{
         fun displayScreen()
         fun showLoading()
-        fun displayArtivles(articles: List<Article>)
+        fun displayArticles(articles: List<Article>)
         fun dismissLoading()
     }
     interface Presenter{

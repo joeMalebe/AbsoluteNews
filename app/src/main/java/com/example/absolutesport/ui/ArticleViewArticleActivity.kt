@@ -2,6 +2,7 @@ package com.example.absolutesport.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -9,7 +10,9 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.DisplayMetrics
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.absolutesport.R
@@ -20,6 +23,12 @@ import java.io.FileNotFoundException
 
 class ArticleViewArticleActivity : AppCompatActivity() {
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == android.R.id.home) {
+            finish()
+        }
+        return true
+    }
 
     companion object {
         private const val REGEX_PATTERN = "\\[\\+\\d+\\s\\w+]"
@@ -38,7 +47,7 @@ class ArticleViewArticleActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val extras = intent.extras
-        if (extras != null && extras.get(EXTRA_ARTICLE) != null) {
+        if (extras?.get(EXTRA_ARTICLE) != null) {
 
             val article = extras.get(EXTRA_ARTICLE) as Article
             displayScreen(article)
@@ -46,7 +55,7 @@ class ArticleViewArticleActivity : AppCompatActivity() {
     }
 
     private fun displayScreen(article: Article) {
-        text_article_title.setText(article.title)
+        text_article_title.text = article.title
 
         val content =
             if (article.content != null) {
@@ -69,10 +78,22 @@ class ArticleViewArticleActivity : AppCompatActivity() {
             content.length,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        text_content.setText(spannableString)
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val width = displayMetrics.widthPixels
+        val height = Math.round(displayMetrics.heightPixels * 0.4).toInt()
+
+        text_content.text = spannableString
         text_content.movementMethod = LinkMovementMethod.getInstance()
         try {
-            image_article_bilboard.setImageBitmap(BitmapFactory.decodeStream(openFileInput(article.hashCode().toString())))
+
+            image_article_bilboard.setImageBitmap(
+                Bitmap.createScaledBitmap(
+                    BitmapFactory.decodeStream(
+                        openFileInput(article.hashCode().toString())
+                    ), width, height, false
+                )
+            )
 
         } catch (exception: FileNotFoundException) {
             Log.e(ArticleViewArticleActivity::class.simpleName, exception.message)
@@ -91,7 +112,7 @@ class ArticleViewArticleActivity : AppCompatActivity() {
         return if (content.contains(Regex(REGEX_PATTERN))) {
             content.replace(Regex(REGEX_PATTERN), getString(R.string.read_more))
         } else {
-            content
+            "$content ${getString(R.string.read_more)}"
         }
     }
 }
