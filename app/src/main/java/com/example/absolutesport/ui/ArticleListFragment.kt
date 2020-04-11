@@ -4,30 +4,65 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.absolutesport.R
 import com.example.absolutesport.Topic
 import com.example.absolutesport.network.Article
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_articles_list.*
 import java.io.ByteArrayOutputStream
 
-class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
+class ArticleListFragment(private val topic: Topic) : Fragment(), IArticleListMvp.View {
 
     val compositeDisposable = CompositeDisposable()
     val presenter: IArticleListMvp.Presenter = ArticleListPresenter()
+    lateinit var articlesRecyclerView: RecyclerView
+
+    companion object {
+        fun newInstance(topic: Topic): ArticleListFragment {
+            return ArticleListFragment(topic)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.activity_articles_list, container, false)
+        articlesRecyclerView = view.findViewById(R.id.recycler_article_list)
+        presenter.attach(this)
+        presenter.getTopHeadlines(topic)
+        return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_articles_list)
-        presenter.attach(this)
 
+    }
+
+    /*
+    override fun onResume() {
+        super.onResume()
         displayScreen()
+    }*/
+
+    override fun onAttachFragment(childFragment: Fragment) {
+        presenter.attach(this)
     }
 
     override fun displayScreen() {
-        presenter.getTopHeadlines(Topic.SA_NEWS)
+
     }
 
     override fun showLoading() {
@@ -42,7 +77,7 @@ class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
 
                 startActivity(
                     ArticleViewArticleActivity.getStartIntent(
-                        recycler_article_list.context,
+                        articlesRecyclerView.context,
                         it
                     )
                 )
@@ -50,12 +85,12 @@ class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
                 Log.e(ArticleListActivity::class.simpleName, it.message)
             }))
 
-            recycler_article_list.adapter = adapter
-            recycler_article_list.layoutManager = LinearLayoutManager(this)
+            articlesRecyclerView.adapter = adapter
+            articlesRecyclerView.layoutManager = LinearLayoutManager(this.context)
 
-            recycler_article_list.addItemDecoration(
+            articlesRecyclerView.addItemDecoration(
                 DividerItemDecoration(
-                    recycler_article_list.context,
+                    articlesRecyclerView.context,
                     LinearLayoutManager.VERTICAL
                 )
             )
@@ -68,8 +103,8 @@ class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
             val byteArrayOutputStream = ByteArrayOutputStream()
             article.image!!.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
             val fileOutputStream =
-                openFileOutput(article.hashCode().toString(), Context.MODE_PRIVATE)
-            fileOutputStream.write(byteArrayOutputStream.toByteArray())
+                this.context?.openFileOutput(article.hashCode().toString(), Context.MODE_PRIVATE)
+            fileOutputStream?.write(byteArrayOutputStream.toByteArray())
             article.image = null
         }
     }
@@ -83,3 +118,4 @@ class ArticleListActivity : AppCompatActivity(), IArticleListMvp.View {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
+

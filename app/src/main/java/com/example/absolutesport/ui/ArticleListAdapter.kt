@@ -113,9 +113,9 @@ open class ArticleListAdapter(val articles: List<Article>) :
         ) : Observer<Bitmap> {
 
             override fun onNext(bitmapFromUrl: Bitmap) {
+                dismissLoader()
                 image.setImageBitmap(Bitmap.createScaledBitmap(bitmapFromUrl, 200, 140, false))
                 article.image = bitmapFromUrl
-                dismissLoader()
             }
 
             override fun onSubscribe(d: Disposable) {
@@ -130,6 +130,7 @@ open class ArticleListAdapter(val articles: List<Article>) :
 
             override fun onComplete() {
                 Log.d("DownloadImageFromUrl", "on complete")
+                dismissLoader()
             }
         }
 
