@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context=".ui.LandingActivity">
 
+    <include layout="@layout/layout_header" />
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_topics"
         android:layout_width="match_parent"
@@ -18,6 +20,8 @@
             app:tabMode="scrollable"
             android:background="@color/tab_color"
             app:tabTextColor="@color/white"
+            app:tabTextAppearance="@style/text_subtitle"
+            tools:text="Hello"
             android:id="@+id/tab_headings" />
     </androidx.viewpager.widget.ViewPager>
 
