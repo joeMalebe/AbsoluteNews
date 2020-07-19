@@ -1,5 +1,6 @@
 package com.example.absolutesport.ui
 
+import com.example.absolutesport.Topic
 import com.example.absolutesport.network.Article
 
 interface IArticleListMvp {
@@ -10,7 +11,7 @@ interface IArticleListMvp {
         fun dismissLoading()
     }
     interface Presenter{
-        fun getTopHeadlines()
+        fun getTopHeadlines(topic: Topic)
         fun attach(view:View)
         fun detach()
     }

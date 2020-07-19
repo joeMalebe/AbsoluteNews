@@ -5,16 +5,24 @@
     android:id="@+id/constraint_ayout_view_article"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/gutterSpace"
     android:orientation="vertical">
+
+    <include
+        android:id="@+id/main_app_bar"
+        layout="@layout/layout_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_article_bilboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="@dimen/gutterSpace"
+        android:paddingEnd="@dimen/gutterSpace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_app_bar"
         tools:src="@mipmap/ic_launcher" />
 
     <TextView
@@ -22,18 +30,24 @@
         style="@style/text_subtitle_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/gutterSpace"
+        android:layout_marginEnd="@dimen/gutterSpace"
         android:layout_marginTop="@dimen/gutterSpace"
-        android:layout_marginBottom="@dimen/gutterSpaceHalf"
         app:layout_constraintEnd_toEndOf="@id/image_article_bilboard"
         app:layout_constraintStart_toStartOf="@id/image_article_bilboard"
-        app:layout_constraintTop_toBottomOf="@id/image_article_bilboard" />
+        app:layout_constraintTop_toBottomOf="@id/image_article_bilboard"
+        tools:text="this is the title" />
 
     <TextView
         android:id="@+id/text_content"
         style="@style/text_caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/gutterSpace"
+        android:layout_marginEnd="@dimen/gutterSpace"
+        android:layout_marginTop="@dimen/gutterSpaceHalf"
         app:layout_constraintEnd_toEndOf="@id/text_article_title"
         app:layout_constraintStart_toStartOf="@id/text_article_title"
-        app:layout_constraintTop_toBottomOf="@id/text_article_title" />
+        app:layout_constraintTop_toBottomOf="@id/text_article_title"
+        tools:text="this is the body" />
 </androidx.constraintlayout.widget.ConstraintLayout>

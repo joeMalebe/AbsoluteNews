@@ -1,5 +1,6 @@
 package com.example.absolutesport.ui
 
+import com.example.absolutesport.Topic
 import com.example.absolutesport.network.Article
 import com.example.absolutesport.repository.NetworkRepository
 import io.reactivex.SingleObserver
@@ -13,8 +14,8 @@ class ArticleListPresenter : IArticleListMvp.Presenter {
     private lateinit var view: IArticleListMvp.View
 
     val networkRepository = NetworkRepository()
-    override fun getTopHeadlines() {
-        networkRepository.getTopHeadlines().subscribeOn(Schedulers.io())
+    override fun getTopHeadlines(topic: Topic) {
+        networkRepository.getTopHeadlines(topic).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe(TopHeadlinesObserver(view))
     }
 
